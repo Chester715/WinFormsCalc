@@ -10,9 +10,11 @@ namespace WinFormsCalc
         int CurrentList = -1;
         List<List<char>> Numbers = new List<List<char>>();
         List<char> Operators = new List<char>();
+        List<int> CalcNums = new List<int>();
 
         public void AddDigit(char Digit)
         {
+            
             if (CreatingNum == true)
             {
                 Numbers.Add(new List<char>());
@@ -43,11 +45,13 @@ namespace WinFormsCalc
 
         public void Calculate()
         {
-            // Iterate through first list of characters to get an integer value
-            for (int i = 0; i > Numbers[1].Count; i++)
-            {
+            var result = 
+                new MultiplyOperator(new Number(5.0), new MultiplyOperator(new Number(4.0), new NegativeOperator(new Number(3.0))))
+                .GetResult();
 
-            }
+            // Iterate through first list of characters to get an integer value
+            
+
             // Iterate through 2nd list of characters to get an integer value
             // Preform calculation on 2 integers
         }
@@ -133,4 +137,89 @@ namespace WinFormsCalc
 
         }
     }
+}
+
+
+public abstract class ExpressionNode
+{
+    public abstract double GetResult();
+}
+
+public class Number : ExpressionNode
+{
+
+    public double Value { get; }
+
+    public Number(double value)
+    {
+        Value = value;
+    }
+
+    public override double GetResult()
+    {
+        return Value;
+    }
+}
+
+public abstract class Operator : ExpressionNode
+{
+    public string OperatorSymbol { get; set; }
+
+    protected Operator(string operatorSymbol)
+    {
+        OperatorSymbol = operatorSymbol;
+    }
+
+}
+
+public abstract class UnaryOperator : Operator
+{
+
+    public ExpressionNode RHS { get; }
+
+    public UnaryOperator(string operatorSymbol, ExpressionNode rhs) : base(operatorSymbol)
+    {
+        RHS = rhs;
+    }
+}
+
+public abstract class BinaryOperator : Operator
+{
+
+    public ExpressionNode LHS { get; }
+    public ExpressionNode RHS { get;  }
+
+    public BinaryOperator(string operatorSymbol, ExpressionNode lhs, ExpressionNode rhs) : base(operatorSymbol)
+    {
+        LHS =lhs;
+        RHS = rhs;
+    }
+}
+
+public class MultiplyOperator : BinaryOperator
+{
+    public MultiplyOperator(ExpressionNode lhs, ExpressionNode rhs) : base("*", lhs, rhs)
+    {
+        
+    }
+
+    public override double GetResult()
+    {
+        return LHS.GetResult() * RHS.GetResult();
+    }
+
+}
+
+
+public class NegativeOperator : UnaryOperator
+{
+    public NegativeOperator(Number rhs) : base("-", rhs)
+    {
+    }
+
+    public override double GetResult()
+    {
+        return -RHS.GetResult();
+    }
+
 }
