@@ -209,6 +209,48 @@ public class MultiplyOperator : BinaryOperator
     }
 
 }
+public class AdditionOperator : BinaryOperator
+{
+    public AdditionOperator(ExpressionNode lhs, ExpressionNode rhs) : base("+", lhs, rhs)
+    {
+        
+    }
+
+    public override double GetResult()
+    {
+        return LHS.GetResult() + RHS.GetResult();
+    }
+
+}
+
+public class DivisionOperator : BinaryOperator
+{
+    public DivisionOperator(ExpressionNode lhs, ExpressionNode rhs) : base("/", lhs, rhs)
+    {
+        
+    }
+
+    public override double GetResult()
+    {
+        return RHS.GetResult() / LHS.GetResult();
+    }
+
+}
+
+public class SubtractionOperator : BinaryOperator
+{
+    public SubtractionOperator(ExpressionNode lhs, ExpressionNode rhs) : base("-", lhs, rhs)
+    {
+        
+    }
+
+    public override double GetResult()
+    {
+        return RHS.GetResult() - LHS.GetResult();
+    }
+
+}
+
 
 
 public class NegativeOperator : UnaryOperator
